@@ -13,16 +13,16 @@ public class FunctionalTest {
         String secondString = "secondString";
         String thirdString = "firstString";
 
-        long idOneString = shortener.getId(firstString);
-        long idTwoString = shortener.getId(secondString);
-        long idThreeString = shortener.getId(thirdString);
+        long idFirstString = shortener.getId(firstString);
+        long idSecondString = shortener.getId(secondString);
+        long idThirdString = shortener.getId(thirdString);
 
-        Assert.assertNotEquals(idOneString, idTwoString);
-        Assert.assertEquals(idOneString, idThreeString);
+        Assert.assertNotEquals(idFirstString, idSecondString);
+        Assert.assertEquals(idFirstString, idThirdString);
 
-        String testFirstString = shortener.getString(idOneString);
-        String testSecondString = shortener.getString(idTwoString);
-        String testThirdString = shortener.getString(idThreeString);
+        String testFirstString = shortener.getString(idFirstString);
+        String testSecondString = shortener.getString(idSecondString);
+        String testThirdString = shortener.getString(idThirdString);
 
         Assert.assertEquals(firstString, testFirstString);
         Assert.assertEquals(secondString, testSecondString);
