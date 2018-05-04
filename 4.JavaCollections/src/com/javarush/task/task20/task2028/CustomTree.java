@@ -1,5 +1,7 @@
 package com.javarush.task.task20.task2028;
 
+import jdk.nashorn.internal.runtime.ECMAException;
+
 import java.io.Serializable;
 import java.util.*;
 
@@ -136,7 +138,12 @@ public class CustomTree extends AbstractList<String> implements Cloneable, Seria
 
     @Override
     public boolean remove(Object o) {
-        String s = (String) o;
+        String s = null;
+        try {
+            s = (String) o;
+        } catch (Exception e){
+            throw new UnsupportedOperationException();
+        }
         Queue<Entry<String>> queue = new LinkedList<>();
         queue.add(root);
         while (!queue.isEmpty()) {
