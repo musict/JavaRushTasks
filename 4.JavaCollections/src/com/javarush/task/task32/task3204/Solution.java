@@ -12,6 +12,30 @@ public class Solution {
     }
 
     public static ByteArrayOutputStream getPassword() {
-        return null;
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+        String laters = "abcdefghijklmnopqrstuvwxyz";
+        String digits = "1234567890";
+        StringBuilder pass = new StringBuilder();
+
+        for (int i=0; i<3; i++) {
+            pass.append(laters.charAt((int)(Math.random()*26)));
+        }
+        for (int i=0; i<3; i++) {
+            pass.append(digits.charAt((int)(Math.random()*10)));
+        }
+        for (int i=0; i<2; i++) {
+            pass.append(laters.toUpperCase().charAt((int)(Math.random()*26)));
+        }
+
+        try {
+            output.write(pass.toString().getBytes());
+        } catch (Exception ignored)
+        {
+
+        }
+
+        return output;
     }
+
 }
