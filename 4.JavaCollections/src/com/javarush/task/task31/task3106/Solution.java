@@ -2,50 +2,47 @@ package com.javarush.task.task31.task3106;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 /*
 Разархивируем файл
 */
-public class Solution {
+public class Solution
+{
     public static void main(String[] args) throws IOException {
-        if (args == null) { return; }
-        List<String> pathsList = new ArrayList<String>();
+        if (args.length < 2) return;
 
-        for (int i = 1; i < args.length; i++) {
-            pathsList.add(args[i]);
+        String resultFileName = args[0];
+        int filePartCount = args.length - 1;
+        String[] fileNamePart = new String[filePartCount];
+        for (int i = 0; i < filePartCount; i++)
+        {
+            fileNamePart[i] = args[i + 1];
         }
+        Arrays.sort(fileNamePart);
 
-        Collections.sort(pathsList, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return o1.substring(o1.length() - 3).compareTo(o2.substring(o2.length() - 3));
-            }
-        });
-
-        List<FileInputStream> streamsLists = new ArrayList<>();
-        for (int i = 0; i < pathsList.size(); i++) {
-            streamsLists.add(new FileInputStream(pathsList.get(i)));
+        List<FileInputStream> fisList = new ArrayList<>();
+        for (int i = 0; i < filePartCount; i++)
+        {
+            fisList.add(new FileInputStream(fileNamePart[i]));
         }
-
-        ZipInputStream fullZipInput = new ZipInputStream(new SequenceInputStream(Collections.enumeration(streamsLists)));
-        ZipEntry zipEntry = null;
-        FileOutputStream out = new FileOutputStream(new File(args[0]));
-        while ((zipEntry = fullZipInput.getNextEntry()) != null) {
-            int symbol = 0;
+        SequenceInputStream seqInStream = new SequenceInputStream(Collections.enumeration(fisList));
+        ZipInputStream zipInStream = new ZipInputStream(seqInStream);
+        FileOutputStream fileOutStream = new FileOutputStream(resultFileName);
+        byte[] buf = new byte[1024 * 1024];
+        while (zipInStream.getNextEntry() != null)
+        {
             int count;
-            byte[] buff = new byte[1024 * 1024];
-            while ((count = fullZipInput.read(buff)) != -1) {
-                out.write(buff, 0, count);
+            while ((count = zipInStream.read(buf)) != -1)
+            {
+                fileOutStream.write(buf, 0, count);
             }
-            out.flush();
         }
-        fullZipInput.close();
-        out.close();
-
+        seqInStream.close();
+        zipInStream.close();
+        fileOutStream.close();
     }
 }
